@@ -1,0 +1,54 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "retry": "Reintentar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "copied": "Copiado al portapapeles",
+    "offline": "Sin conexión. Mostrando última tasa."
+  },
+  "home": {
+    "title": "TuTasa",
+    "bcvRate": "Tasa BCV",
+    "usdtRate": "Tasa USDT",
+    "lastUpdated": "Actualizado: {{time}}"
+  },
+  "converter": {
+    "title": "Conversor",
+    "usdToBs": "USD a Bs",
+    "bsToUsd": "Bs a USD",
+    "usdtToBs": "USDT a Bs",
+    "bsToUsdt": "Bs a USDT",
+    "amount": "Monto",
+    "result": "Resultado"
+  },
+  "calculator": {
+    "title": "Calculadora",
+    "profit": "Precio con Ganancia",
+    "discount": "Descuento",
+    "change": "Cambio Exacto",
+    "basePrice": "Precio Base",
+    "profitMargin": "Margen (%)",
+    "discountPercent": "Descuento (%)",
+    "finalPrice": "Precio Final",
+    "amountPaid": "Monto Pagado",
+    "totalToPay": "Total a Pagar",
+    "yourChange": "Tu Cambio"
+  },
+  "history": {
+    "title": "Historial",
+    "noHistory": "No hay tasas guardadas aún."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": "Idioma",
+    "theme": "Tema",
+    "decimals": "Decimales",
+    "rateSource": "Fuente de Tasa",
+    "about": "Acerca de TuTasa",
+    "dark": "Oscuro",
+    "light": "Claro",
+    "system": "Sistema"
+  }
+}

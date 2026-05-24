@@ -1,0 +1,54 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "copied": "Copied to clipboard",
+    "offline": "Offline. Showing last saved rate."
+  },
+  "home": {
+    "title": "TuTasa",
+    "bcvRate": "BCV Rate",
+    "usdtRate": "USDT Rate",
+    "lastUpdated": "Updated: {{time}}"
+  },
+  "converter": {
+    "title": "Converter",
+    "usdToBs": "USD to Bs",
+    "bsToUsd": "Bs to USD",
+    "usdtToBs": "USDT to Bs",
+    "bsToUsdt": "Bs to USDT",
+    "amount": "Amount",
+    "result": "Result"
+  },
+  "calculator": {
+    "title": "Calculator",
+    "profit": "Price with Profit",
+    "discount": "Discount",
+    "change": "Exact Change",
+    "basePrice": "Base Price",
+    "profitMargin": "Margin (%)",
+    "discountPercent": "Discount (%)",
+    "finalPrice": "Final Price",
+    "amountPaid": "Amount Paid",
+    "totalToPay": "Total to Pay",
+    "yourChange": "Your Change"
+  },
+  "history": {
+    "title": "History",
+    "noHistory": "No rates saved yet."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "decimals": "Decimals",
+    "rateSource": "Rate Source",
+    "about": "About TuTasa",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  }
+}
