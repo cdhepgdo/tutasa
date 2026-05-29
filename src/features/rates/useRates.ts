@@ -1,17 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import { ratesService } from './ratesService';
 import { useRatesStore } from './ratesStore';
+import { useSettingsStore } from '../settings/settingsStore';
 import { config } from '../../constants/config';
 import { useEffect } from 'react';
 
 export function useRates() {
   const setRates = useRatesStore((state) => state.setRates);
   const currentRates = useRatesStore((state) => state.currentRates);
+  const useFutureRate = useSettingsStore((state) => state.useFutureRate);
 
   const query = useQuery({
-    queryKey: ['rates'],
+    queryKey: ['rates', useFutureRate],
     queryFn: async () => {
-      const data = await ratesService.getRates();
+      const data = await ratesService.getRates(useFutureRate);
       return data;
     },
     // Refetch cada X minutos

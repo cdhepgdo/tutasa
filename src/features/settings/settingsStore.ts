@@ -11,6 +11,7 @@ export const useSettingsStore = create<SettingsState>()(
       theme: 'dark', // Por defecto oscuro, a petición
       language: 'es',
       decimals: config.DEFAULT_DECIMALS,
+      useFutureRate: false,
       
       setTheme: (theme) => set({ theme }),
       
@@ -20,6 +21,8 @@ export const useSettingsStore = create<SettingsState>()(
       },
       
       setDecimals: (decimals) => set({ decimals }),
+      
+      setUseFutureRate: (useFutureRate) => set({ useFutureRate }),
     }),
     {
       name: 'tutasa-settings-storage',

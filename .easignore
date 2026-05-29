@@ -1,0 +1,18 @@
+# Ignorar carpetas que no son parte de la app móvil
+
+# Skills de IA (contiene symlinks que no son compatibles con EAS en Windows)
+.agents/
+.claude/
+
+# Backend de Firebase (no se necesita en el APK)
+functions/
+
+# Archivos de configuración de Firebase
+firebase.json
+.firebaserc
+
+# Archivos de desarrollo
+*.md
+task.md
+implementation_plan.md
+walkthrough.md

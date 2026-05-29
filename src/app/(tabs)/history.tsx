@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { SafeScreen } from '../../components/layout/SafeScreen';
 import { ScreenHeader } from '../../components/layout/ScreenHeader';
 import { Card } from '../../components/ui/Card';
@@ -10,15 +11,24 @@ import { dateHelpers } from '../../utils/dateHelpers';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../../constants/theme';
 import { AdBanner } from '../../features/ads/AdBanner';
+import { RatesChart } from '../../features/history/components/RatesChart';
 
 export default function HistoryScreen() {
   const { t } = useTranslation();
   const snapshots = useHistoryStore(state => state.snapshots);
+  const clearHistory = useHistoryStore(state => state.clearHistory);
   const decimals = useSettingsStore(state => state.decimals);
 
   return (
     <SafeScreen>
-      <ScreenHeader title={t('history.title')} />
+      <View style={styles.headerRow}>
+        <ScreenHeader title={t('history.title')} />
+        {snapshots.length > 0 && (
+          <TouchableOpacity onPress={clearHistory} style={styles.clearBtn}>
+            <Ionicons name="trash-outline" size={20} color={theme.colors.error} />
+          </TouchableOpacity>
+        )}
+      </View>
       
       <AdBanner />
 
@@ -29,9 +39,10 @@ export default function HistoryScreen() {
       ) : (
         <FlatList
           data={snapshots}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => item.id + '-' + index}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
+          ListHeaderComponent={<RatesChart snapshots={snapshots} />}
           renderItem={({ item }) => (
             <Card style={styles.historyCard}>
               <View style={styles.dateRow}>
@@ -63,6 +74,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  clearBtn: {
+    padding: theme.spacing.s,
   },
   emptyText: {
     color: theme.colors.textMuted,

@@ -5,7 +5,9 @@ export interface SettingsState {
   theme: ThemeMode;
   language: AppLanguage;
   decimals: number;
+  useFutureRate: boolean;
   setTheme: (theme: ThemeMode) => void;
   setLanguage: (lang: AppLanguage) => void;
   setDecimals: (decimals: number) => void;
+  setUseFutureRate: (value: boolean) => void;
 }

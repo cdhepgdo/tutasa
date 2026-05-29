@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { SafeScreen } from '../../components/layout/SafeScreen';
 import { ScreenHeader } from '../../components/layout/ScreenHeader';
 import { Card } from '../../components/ui/Card';
@@ -22,6 +22,17 @@ export default function HomeScreen() {
   const { rates, isLoading, isOfflineData, refetch, isFetching } = useRates();
   const { addSnapshot, snapshots } = useHistoryStore();
   const decimals = useSettingsStore(state => state.decimals);
+  const useFutureRate = useSettingsStore(state => state.useFutureRate);
+  const setUseFutureRate = useSettingsStore(state => state.setUseFutureRate);
+
+  const isWeekend = dateHelpers.isWeekendWindow();
+
+  // Auto-desactivar la tasa futura si ya pasó el fin de semana
+  useEffect(() => {
+    if (!isWeekend && useFutureRate) {
+      setUseFutureRate(false);
+    }
+  }, [isWeekend, useFutureRate, setUseFutureRate]);
 
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyType>('USD');
   const [foreignAmount, setForeignAmount] = useState('');
@@ -41,7 +52,7 @@ export default function HomeScreen() {
   useEffect(() => {
     if (rates && !isOfflineData) {
       addSnapshot({
-        id: dateHelpers.getTodayId(),
+        id: rates.lastUpdated.toString(),
         date: new Date().toISOString(),
         bcv: rates.bcv,
         eur: rates.eur,
@@ -89,9 +100,8 @@ export default function HomeScreen() {
     }
   };
 
-  // Identificar el "ayer"
-  const todayId = dateHelpers.getTodayId();
-  const previousSnapshot = snapshots.find(s => s.id !== todayId) || snapshots[1];
+  // Obtener el snapshot previo para calcular la tendencia
+  const previousSnapshot = snapshots[1];
 
   const renderTrend = (current: number, previous?: number) => {
     const trend = calculations.calculateTrend(current, previous);
@@ -136,7 +146,7 @@ export default function HomeScreen() {
     <SafeScreen>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <View style={styles.headerRow}>
           <ScreenHeader
@@ -153,6 +163,7 @@ export default function HomeScreen() {
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
           refreshControl={
             <RefreshControl refreshing={isFetching} onRefresh={refetch} tintColor={theme.colors.primary} />
           }
@@ -169,6 +180,27 @@ export default function HomeScreen() {
                 {renderRateCard('EUR', '€', rates.eur, previousSnapshot?.eur)}
                 {renderRateCard('USDT', '₮', rates.usdt, previousSnapshot?.usdt)}
               </View>
+
+              {/* Toggle de Tasa Futura (Próxima Actualización) - Solo visible en Fin de Semana */}
+              {isWeekend && (
+                <View style={styles.toggleContainer}>
+                  <View style={styles.toggleTextContainer}>
+                    <Text style={styles.toggleTitle}>Sugerencia de Fin de Semana</Text>
+                    <Text style={[styles.toggleSubtitle, useFutureRate && styles.toggleSubtitleActive]}>
+                      {useFutureRate
+                        ? `Tasa del Lunes`
+                        : `Usando BCV de Cierre`}
+                    </Text>
+                  </View>
+                  <Switch
+                    value={useFutureRate}
+                    onValueChange={setUseFutureRate}
+                    trackColor={{ false: theme.colors.border, true: theme.colors.primary }}
+                    thumbColor={Platform.OS === 'ios' ? '#fff' : useFutureRate ? '#fff' : theme.colors.textMuted}
+                    ios_backgroundColor={theme.colors.border}
+                  />
+                </View>
+              )}
 
               {/* Mini Conversor Integrado */}
               <Card style={styles.converterCard}>
@@ -274,6 +306,35 @@ const styles = StyleSheet.create({
   },
   converterCard: {
     padding: theme.spacing.l,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.l,
+    borderRadius: theme.borderRadius.l,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    marginBottom: theme.spacing.l,
+  },
+  toggleTextContainer: {
+    flex: 1,
+    marginRight: theme.spacing.m,
+  },
+  toggleTitle: {
+    fontSize: theme.typography.sizes.m,
+    fontWeight: theme.typography.weights.semibold,
+    color: theme.colors.text,
+    marginBottom: 4,
+  },
+  toggleSubtitle: {
+    fontSize: theme.typography.sizes.s,
+    color: theme.colors.textMuted,
+  },
+  toggleSubtitleActive: {
+    color: '#f97316', // un naranja premium como en el boceto del usuario
+    fontWeight: theme.typography.weights.medium,
   },
   converterTitle: {
     fontSize: theme.typography.sizes.m,

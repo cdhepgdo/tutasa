@@ -4,21 +4,38 @@ import { theme } from '../../constants/theme';
 interface ScreenHeaderProps {
   title: string;
   subtitle?: string;
+  rightElement?: React.ReactNode;
 }
 
-export function ScreenHeader({ title, subtitle }: ScreenHeaderProps) {
+export function ScreenHeader({ title, subtitle, rightElement }: ScreenHeaderProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>{title}</Text>
+        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+      </View>
+      {rightElement && (
+        <View style={styles.rightContainer}>
+          {rightElement}
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: theme.spacing.m,
     marginBottom: theme.spacing.s,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  rightContainer: {
+    marginLeft: theme.spacing.m,
   },
   title: {
     color: theme.colors.text,

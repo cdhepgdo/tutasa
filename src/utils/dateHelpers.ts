@@ -24,5 +24,21 @@ export const dateHelpers = {
    */
   formatDate: (timestamp: number): string => {
     return new Date(timestamp).toLocaleDateString('es-VE');
+  },
+
+  /**
+   * Detecta si estamos en el "Fin de Semana" (Viernes 3 PM hasta Lunes 12 PM)
+   * donde el BCV no actualiza sus tasas.
+   */
+  isWeekendWindow: (): boolean => {
+    const now = new Date();
+    const day = now.getDay(); // 0 = Domingo, 1 = Lunes, 5 = Viernes, 6 = Sábado
+    const hour = now.getHours();
+
+    if (day === 5 && hour >= 15) return true; // Viernes después de las 3:00 PM
+    if (day === 6 || day === 0) return true;  // Sábado y Domingo enteros
+    if (day === 1 && hour < 12) return true;  // Lunes antes de las 12:00 PM
+    
+    return false;
   }
 };
